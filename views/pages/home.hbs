@@ -1,8 +1,20 @@
-<h1>{{{ title }}}</h1>
+<div class="home-page">
+    <h1>Система управления сервером</h1>
 
-<div>
-    <button data-state="master">Обновить мастер</button>
-    <button data-state="dev">Обновить дев</button>
+    <div class="content">
+        <button data-deploy data-state="master">Обновить мастер</button>
+        <button data-deploy data-state="dev">Обновить дев</button>
+    </div>
+
+    <div class="content">
+        <label class="m-b-5 d-block">Текущая ветка: {{ dev_branch }}</label>
+
+        <div class="input-wrapper">
+            <input type="text">
+
+            <button data-switch>Сменить</button>
+        </div>
+    </div>
 
     <div class="messages">
 
@@ -10,52 +22,5 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-
-<script>
-    const deploy = (state) => {
-        const wrapper = document.body.querySelector('.messages')
-
-        wrapper.innerHTML = ''
-
-        fetch('/api/deploy', {
-            method: 'POST',
-            body: JSON.stringify({
-                state
-            })
-        }).catch((err) => {
-            console.error('err', err)
-        })
-    }
-
-    const addedMessages = (messages = []) => {
-        const wrapper = document.body.querySelector('.messages')
-
-        if (!Array.isArray(messages)) {
-            messages = [messages]
-        }
-
-        messages.forEach(({ status = 'success', message }) => {
-            const div = document.createElement('div')
-
-            div.classList = status
-
-            div.textContent = `${ message }`
-
-            wrapper.appendChild(div)
-        })
-    }
-
-    const socket = io()
-
-    socket.on('command message', (messages) => {
-        addedMessages(messages)
-    })
-
-    window.addEventListener('load', () => {
-        const buttons = document.body.querySelectorAll('button')
-
-        buttons.forEach((el) => {
-            el.addEventListener('click', () => deploy(el.dataset.state))
-        })
-    })
-</script>
+<script src="/scripts/sockets.js"></script>
+<script src="/scripts/events.js"></script>

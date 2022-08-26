@@ -20,6 +20,7 @@ const main = () => {
 	try {
 		// Статика
 		app.use('/assets', express.static(path.join(__dirname, '../views/assets')))
+		app.use('/scripts', express.static(path.join(__dirname, '../views/scripts')))
 
 		// Парсер
 		require(path.join(__dirname, '/app_node/parser'))({ app })
@@ -28,6 +29,9 @@ const main = () => {
 		// HBS
 		require(path.join(__dirname, '/app_node/handlebars'))({ app })
 		// ****
+
+		// ПО
+		app.use(require(path.join(__dirname, '/app_node/middleware/verification')))
 
 		// Роутер
 		const router = require(path.join(__dirname, '/app_node/router'))

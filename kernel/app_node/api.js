@@ -22,6 +22,13 @@ const setMessage = (io, { message = '', status = 'success', ls_status = 'stdout'
 	io.emit(emit, params)
 }
 
+const runCommand = (command = '', options = {}) => {
+	return spawn('cmd /c chcp 65001>nul && ' + command, {
+		shell: true,
+		...options
+	})
+}
+
 module.exports = ({ io }) => {
 
 	io.on('connection', (socket) => {
@@ -35,7 +42,7 @@ module.exports = ({ io }) => {
 	})
 
 	router.post('/deploy', async (req, res) => {
-		const ls = spawn("ping", ["erp.macrobank.pro"])
+		const ls = runCommand('cd .. && dir')
 
 		ls.stdout.on("data", data => {
 			setMessage(io, {
