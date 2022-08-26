@@ -9,8 +9,8 @@ body {
     padding: 20px
 }
 
-.danger {
-    color: red
+.error {
+    color: var(--c-danger)
 }
 
 button {

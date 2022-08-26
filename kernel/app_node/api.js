@@ -42,6 +42,10 @@ module.exports = ({ io }) => {
 	})
 
 	router.post('/deploy', async (req, res) => {
+		const {
+			state
+		} = req.body
+
 		const ls = runCommand('cd .. && dir')
 
 		ls.stdout.on("data", data => {
@@ -75,6 +79,36 @@ module.exports = ({ io }) => {
 			})
 
 			res.status(200).json({})
+		})
+	})
+
+	router.post('/switch-branch', async (req, res) => {
+		let {
+			branch = 'dev'
+		} = req.body
+
+		if (branch === 'master') {
+			branch = 'dev'
+		}
+
+		exec(`cd ../macrobank && git checkout ${ branch }`, (err, stdout, stderr) => {
+			if (err) {
+				setMessage(io, {
+					message: `${ err.message }`,
+					status: 'error',
+					ls_status: 'error',
+					resetMessages: true,
+				})
+
+				res.status(500).json({ message: err.message })
+			} else {
+				setMessage(io, {
+					message: stderr,
+					resetMessages: true,
+				})
+
+				res.status(200).json({ branch })
+			}
 		})
 	})
 

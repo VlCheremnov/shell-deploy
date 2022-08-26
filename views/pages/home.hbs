@@ -7,10 +7,10 @@
     </div>
 
     <div class="content">
-        <label class="m-b-5 d-block">Текущая ветка: {{ dev_branch }}</label>
+        <label for="switcher" class="m-b-5 d-block" data-branch>Текущая ветка: {{ dev_branch }}</label>
 
         <div class="input-wrapper">
-            <input type="text">
+            <input id="switcher" type="text">
 
             <button data-switch>Сменить</button>
         </div>
@@ -22,5 +22,6 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/requests.js"></script>
 <script src="/scripts/sockets.js"></script>
 <script src="/scripts/events.js"></script>

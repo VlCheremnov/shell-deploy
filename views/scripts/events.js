@@ -3,14 +3,36 @@ const deploy = (state) => {
 
 	wrapper.innerHTML = ''
 
-	fetch('/api/deploy', {
-		method: 'POST',
-		body: JSON.stringify({
-			state
+	sendRequests('/api/deploy', { state })
+		.catch((err) => {
+			console.error('err', err)
 		})
-	}).catch((err) => {
-		console.error('err', err)
-	})
+}
+
+const switchBranch = () => {
+	const wrapper = document.body.querySelector('.messages')
+
+	wrapper.innerHTML = ''
+
+	const input = document.getElementById('switcher')
+
+	const branch = input.value
+
+	sendRequests('/api/switch-branch', { branch })
+		.then((response) => response.json())
+		.then((data) => {
+			const branch = data.branch
+			const label = document.body.querySelector('label[data-branch]')
+
+			if (!branch || !label) {
+				return
+			}
+
+			label.textContent = `Текущая ветка: ${ branch }`
+		})
+		.catch((err) => {
+			console.error('err', err)
+		})
 }
 
 window.addEventListener('load', () => {
@@ -21,8 +43,11 @@ window.addEventListener('load', () => {
 			el.addEventListener('click', () => deploy(el.dataset.state))
 		}
 
-		if (el.dataset.switch !== undefined) {
+		console.log('el.dataset', el.dataset)
 
+		if (el.dataset.switch !== undefined) {
+			console.log('ep')
+			el.addEventListener('click', switchBranch)
 		}
 	})
 })

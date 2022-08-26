@@ -31,7 +31,7 @@ const main = () => {
 		// ****
 
 		// ПО
-		app.use(require(path.join(__dirname, '/app_node/middleware/verification')))
+		app.use(require(path.join(__dirname, '/app_node/middleware/set-config')))
 
 		// Роутер
 		const router = require(path.join(__dirname, '/app_node/router'))
